@@ -12,8 +12,8 @@ public class Attribute {
 	@Override
 	public boolean equals(Object obj) {
 		try {
-			String nn = (String) obj;
-			return nn.equals(name);
+			Attribute att = (Attribute) obj;
+			return this.getName().equals(att.getName());
 		} catch (Exception e){
 			return false;
 		}

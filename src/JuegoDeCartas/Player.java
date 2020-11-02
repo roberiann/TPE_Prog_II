@@ -10,19 +10,35 @@ public class Player {
 	}
     
     public void addCard(Card c) {
-    	deck.addCard(c);
+    	if (c != null)
+    		deck.addCard(c);
     }
    
 	public String getName() {
 		return name;
 	}
 	
-	public int getDeckSize() {
+	public int deckSize() {
 		return deck.size();
 	}
 	
 	public Card topCard() {
 		return deck.topCard();
 	}
+	
+	public Card removeTopCard() {
+		return deck.removeTopCard();
+	}
+	
+	public String getRandomAttribute() {
+		int randomInt = (int) Math.floor(Math.random()* this.topCard().sizeAttributes());
+		return this.topCard().getAttribute(randomInt);
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+		
 	
 }
