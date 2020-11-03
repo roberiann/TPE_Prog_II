@@ -1,15 +1,30 @@
 package JuegoDeCartas;
 
 import java.util.ArrayList;
+import Aditivos.Potion;
 
 public class Card{
 
 	private String name;
 	private ArrayList<Attribute> attributes;
+	private Potion potion;
 		
 	public Card(String name) {
 		this.name = name;
 		attributes = new ArrayList<Attribute>();
+		potion = null;
+	}
+	
+	public boolean hasPotion() {
+	    return potion != null; 			
+	}
+    	
+	public void setPotion(Potion p) {
+		this.potion = p;
+	}
+	
+	public String getPotionName() {
+		return potion.getName();
 	}
 	
 	public int sizeAttributes() {
@@ -32,13 +47,18 @@ public class Card{
 		return name;
 	}
 	
-	public int getAttributeValue(String attrName) {
+	public int getAttValue(String attrName) {
 		for (int i = 0; i < attributes.size(); i++) {
 			if (attributes.get(i).getName().equals(attrName)) {
 		        return attributes.get(i).getValue();
 			}
 		}
 		return -1;
+	}
+	
+	public int getAttValuePlusPotion(String attrName) {
+		Attribute att = new Attribute(attrName, this.getAttValue(attrName));
+		return this.potion.modify(att).getValue();
 	}
 	
 	@Override

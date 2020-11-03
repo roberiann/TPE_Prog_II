@@ -19,6 +19,10 @@ public class Attribute {
 		}
 	}
 
+	public void setValue(int value) {
+		this.value = value;
+	}
+
 	public int getValue() {
 		return value;
 	}
@@ -26,4 +30,5 @@ public class Attribute {
 	public String getName() {
 		return name;
 	}
+
 }

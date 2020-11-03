@@ -4,28 +4,40 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import Aditivos.Potion;
+
 public class Game {
 	private Player player1;
 	private Player player2; 
 	private Deck deck;
-	private static final int MAX_ROUNDS = 10;
+	private int maxRounds;
 	private Player handWinner;
 	private Player handLooser;
 	private String log;
+	private ArrayList<Potion> potions;
 	
-	public Game(String nameJ1, String nameJ2) {
+	public Game(String nameJ1, String nameJ2, int maxRounds) {
 		
+		this.maxRounds = maxRounds;
 		deck = new Deck();
 		player1 = new Player(nameJ1);
 		player2 = new Player(nameJ2);    	
 		handWinner  = player1;	
 		handLooser  = player2;	
 		log = "";
+		potions = new ArrayList<Potion>();
+	}
+	
+	public void addPotion(Potion p) {
+		potions.add(p);
 	}
 	
 	//Cargo el Mazo
@@ -41,24 +53,25 @@ public class Game {
                                   
             JsonObject card = jsonCards.getValuesAs(JsonObject.class).get(0);
             deck.addCard(genCard(card));        
-                      
+                                
             for (int i = 1; i < jsonCards.size() ; i++) {
             	JsonObject newCard = jsonCards.getValuesAs(JsonObject.class).get(i);
             	deck.addCardCriterio(genCard(newCard));
-			}                      
+			}                
             reader.close();
-            deck.shuffle();
-      
+            deck.shuffle();              
+            
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    
+
+	
 	//Genera una carta
 	private Card genCard(JsonObject carta) {
 		Card c1 = new Card(carta.getString("nombre"));
-  
+		         
         JsonObject atributos = (JsonObject) carta.getJsonObject("atributos");
         for (String nombreAtributo:atributos.keySet()) 
         	c1.addAttribute(new Attribute(nombreAtributo, atributos.getInt(nombreAtributo)));
@@ -69,11 +82,17 @@ public class Game {
 	//Reparte cartas
 	private void dealCards() {
 		int tam = deck.size();
-		for (int i = 0; i < tam ; i++) { //Si es par le da la carta al j1 sino a j2 
-			if (i%2 == 0) { 
-				player1.addCard(deck.removeTopCard());
+		Collections.shuffle(potions);
+		
+		for (int i = 0; i < tam ; i++) { //Si es par le da la carta al j1 sino a j2
+			Card card = deck.removeTopCard();
+			if (!potions.isEmpty())
+				card.setPotion(potions.remove(0));
+			
+			if (i%2 == 0) { 				
+   			    player1.addCard(card);
 			}else{
-				player2.addCard(deck.removeTopCard()); 
+				player2.addCard(card); 
 			}
 		}
 	}
@@ -84,7 +103,7 @@ public class Game {
 		  dealCards();	
 		  
 		  int i=0;
-		  while (i<MAX_ROUNDS && player1.deckSize()>0 && player2.deckSize()>0) {
+		  while (i<maxRounds && player1.deckSize()>0 && player2.deckSize()>0) {
 			  i++; 
 			  log += "---------------------------Ronda: " + i + "--------------------------------\n\n";			  
 			  playRound(); 
@@ -97,21 +116,33 @@ public class Game {
 		
 		String attWinner = handWinner.getRandomAttribute();
 		log += "El jugador " + handWinner + " selecciona competir por el atributo " + attWinner + "\n";
-		log += "La carta de " + handWinner + " es " + handWinner.topCard() + " con " + attWinner + " " + handWinner.topCard().getAttributeValue(attWinner) + "\n";		
-		log += "La carta de " + handLooser + " es " + handLooser.topCard() + " con " + attWinner + " " + handLooser.topCard().getAttributeValue(attWinner) + "\n";
 		
-		combat(attWinner);
+		int valueP1 = handWinner.topCard().getAttValue(attWinner);
+		log += "La carta de " + handWinner + " es " + handWinner.topCard() + " con " + attWinner + " " + valueP1;
+		if (handWinner.topCard().hasPotion()) {
+			valueP1 = handWinner.topCard().getAttValuePlusPotion(attWinner);
+			log += ", se aplicó pócima " + handWinner.topCard().getPotionName() + " valor resultante " + valueP1;
+		}	
+		log += "\n";
+		
+		int valueP2 = handLooser.topCard().getAttValue(attWinner);
+		log += "La carta de " + handLooser + " es " + handLooser.topCard() + " con " + attWinner + " " + valueP2 ;
+		if (handLooser.topCard().hasPotion()) {
+			valueP2 = handLooser.topCard().getAttValuePlusPotion(attWinner);
+			log += ", se aplicó pócima " + handLooser.topCard().getPotionName() + " valor resultante " + valueP2;
+		}
+		log += "\n";
+		
+		combat(valueP1, valueP2);		
 	}
 
 	
-	private void combat(String att) {
-		int valueWinner = handWinner.topCard().getAttributeValue(att); 
-		int valueLooser = handLooser.topCard().getAttributeValue(att); 
+	private void combat(int valueP1, int valueP2) {
 		
-		if (valueWinner > valueLooser) {
+		if (valueP1 > valueP2) {
 				resolveWinner();
 		} else {
-			if (valueWinner < valueLooser) {		
+			if (valueP1 < valueP2) {		
 				Player aux = handWinner;
 				handWinner = handLooser; 
 				handLooser = aux;
