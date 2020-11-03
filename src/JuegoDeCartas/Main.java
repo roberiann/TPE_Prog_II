@@ -5,13 +5,22 @@ import Aditivos.PotionAttribute;
 import Aditivos.PotionCocktail;
 import Aditivos.PotionPercentage;
 import Aditivos.PotionValue;
+import Estrategias.Ambitious;
+import Estrategias.Obstinate;
+import Estrategias.Strategy;
 
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		Game game = new Game("Tomas", "Roberto", 10);
+		Strategy timbero = new Obstinate();
+		Strategy ambitious = new Ambitious();
+		
+		Player p1 = new Player("Tomas", timbero);
+		Player p2 = new Player("Roberto", ambitious);
+		
+		Game game = new Game(p1, p2, 10);
 		
 		Potion fortalecedora = new PotionPercentage("Fortalecedora", 1.2); 
 		Potion fortalecedora2 = new PotionPercentage("Fortalecedora", 1.2);
@@ -58,5 +67,4 @@ public class Main {
 		
 		System.out.println(game.getLog());
 	}
-
 }

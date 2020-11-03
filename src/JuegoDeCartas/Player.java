@@ -1,13 +1,22 @@
 package JuegoDeCartas;
 
+import Estrategias.Strategy;
+
 public class Player {
 	private String name;
 	private Deck deck;
-	
-    public Player(String name) {
+	private Strategy strategy; 
+			
+    public Player(String name, Strategy strategy) {
+    	this.strategy = strategy;
 		this.name = name;
 		deck = new Deck();
 	}
+    
+    
+    public void addStrategy(Strategy strategy) {
+    	this.strategy = strategy;
+    }
     
     public void addCard(Card c) {
     	if (c != null)
@@ -30,9 +39,8 @@ public class Player {
 		return deck.removeTopCard();
 	}
 	
-	public String getRandomAttribute() {
-		int randomInt = (int) Math.floor(Math.random()* this.topCard().sizeAttributes());
-		return this.topCard().getAttribute(randomInt);
+	public String getAttribute() {
+		return strategy.getAttribute(this.topCard()); 
 	}
 
 	@Override

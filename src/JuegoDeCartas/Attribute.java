@@ -1,6 +1,6 @@
 package JuegoDeCartas;
 
-public class Attribute {
+public class Attribute implements Comparable<Attribute> {
 	private String name; 
 	private int value;
 	
@@ -23,12 +23,22 @@ public class Attribute {
 		this.value = value;
 	}
 
+	@Override
+	public String toString() {
+		return "Attribute [value=" + value + "]";
+	}
+
 	public int getValue() {
 		return value;
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public int compareTo(Attribute att) {
+		return this.getValue() - att.getValue();
 	}
 
 }

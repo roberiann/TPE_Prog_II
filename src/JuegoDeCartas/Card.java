@@ -1,6 +1,8 @@
 package JuegoDeCartas;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import Aditivos.Potion;
 
 public class Card{
@@ -59,6 +61,12 @@ public class Card{
 	public int getAttValuePlusPotion(String attrName) {
 		Attribute att = new Attribute(attrName, this.getAttValue(attrName));
 		return this.potion.modify(att).getValue();
+	}
+	
+	public String getHigherValue() {
+		ArrayList<Attribute> descOrder = new ArrayList<Attribute>(attributes);
+		Collections.sort(descOrder);
+		return descOrder.get(descOrder.size()-1).getName();  			
 	}
 	
 	@Override

@@ -24,12 +24,12 @@ public class Game {
 	private String log;
 	private ArrayList<Potion> potions;
 	
-	public Game(String nameJ1, String nameJ2, int maxRounds) {
+	public Game(Player p1, Player p2, int maxRounds) {
 		
 		this.maxRounds = maxRounds;
 		deck = new Deck();
-		player1 = new Player(nameJ1);
-		player2 = new Player(nameJ2);    	
+		player1 = p1;
+		player2 = p2;    	
 		handWinner  = player1;	
 		handLooser  = player2;	
 		log = "";
@@ -114,7 +114,7 @@ public class Game {
 		
 	private void playRound() {
 		
-		String attWinner = handWinner.getRandomAttribute();
+		String attWinner = handWinner.getAttribute();
 		log += "El jugador " + handWinner + " selecciona competir por el atributo " + attWinner + "\n";
 		
 		int valueP1 = handWinner.topCard().getAttValue(attWinner);
