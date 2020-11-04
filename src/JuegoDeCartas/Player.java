@@ -48,5 +48,9 @@ public class Player {
 		return name;
 	}
 		
+	public void shuffle() {
+	    deck.shuffle();
+	}
+		
 	
 }

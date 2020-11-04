@@ -11,8 +11,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-
-import Aditivos.Potion;
+import Aditivos.ElementPotion;
 
 public class Game {
 	private Player player1;
@@ -22,7 +21,7 @@ public class Game {
 	private Player handWinner;
 	private Player handLooser;
 	private String log;
-	private ArrayList<Potion> potions;
+	private ArrayList<ElementPotion> potions;
 	
 	public Game(Player p1, Player p2, int maxRounds) {
 		
@@ -33,11 +32,11 @@ public class Game {
 		handWinner  = player1;	
 		handLooser  = player2;	
 		log = "";
-		potions = new ArrayList<Potion>();
+		potions = new ArrayList<ElementPotion>();
 	}
 	
-	public void addPotion(Potion p) {
-		potions.add(p);
+	public void addPotion(ElementPotion potion) {
+		potions.add(potion);
 	}
 	
 	//Cargo el Mazo
@@ -95,6 +94,8 @@ public class Game {
 				player2.addCard(card); 
 			}
 		}
+		player1.shuffle();
+		player2.shuffle();
 	}
 	
 	//Inicio del juego

@@ -1,15 +1,14 @@
 package JuegoDeCartas;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import Aditivos.Potion;
+import Aditivos.ElementPotion;
 
 public class Card{
 
 	private String name;
 	private ArrayList<Attribute> attributes;
-	private Potion potion;
+	private ElementPotion potion;
 		
 	public Card(String name) {
 		this.name = name;
@@ -21,7 +20,7 @@ public class Card{
 	    return potion != null; 			
 	}
     	
-	public void setPotion(Potion p) {
+	public void setPotion(ElementPotion p) {
 		this.potion = p;
 	}
 	
@@ -63,12 +62,6 @@ public class Card{
 		return this.potion.modify(att).getValue();
 	}
 	
-	public String getHigherValue() {
-		ArrayList<Attribute> descOrder = new ArrayList<Attribute>(attributes);
-		Collections.sort(descOrder);
-		return descOrder.get(descOrder.size()-1).getName();  			
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		try {
@@ -87,5 +80,37 @@ public class Card{
 	public String toString() {
 		return name;
 	}
+	
+	public boolean hasAttribute(String attrName) {
+		for (int i = 0; i < attributes.size(); i++) {
+			if (attributes.get(i).getName().equals(attrName)) {
+		        return true;
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<String> getAttributesNames() {
+		ArrayList<String> att = new ArrayList<String>();
+		for (Attribute elem : attributes) {
+			att.add(elem.getName());
+		}				
+		return att;
+	}
+	
+	public Attribute firstAttribute() {
+		return new Attribute(attributes.get(0).getName(), attributes.get(0).getValue());
+	}
+    
+	public Attribute getAttributeByName(String attrName) {
+		for (int i = 0; i < attributes.size(); i++) {
+			if (attributes.get(i).getName().equals(attrName)) {
+		        return new Attribute(attributes.get(i).getName(), attributes.get(i).getValue());
+			}
+		}
+		return null;
+	}
+	
+	
 
 }
