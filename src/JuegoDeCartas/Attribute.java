@@ -9,23 +9,8 @@ public class Attribute implements Comparable<Attribute> {
 		this.value = value;
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		try {
-			Attribute att = (Attribute) obj;
-			return this.getName().equals(att.getName());
-		} catch (Exception e){
-			return false;
-		}
-	}
-
 	public void setValue(int value) {
 		this.value = value;
-	}
-
-	@Override
-	public String toString() {
-		return "Attribute [value=" + value + "]";
 	}
 
 	public int getValue() {
@@ -41,4 +26,14 @@ public class Attribute implements Comparable<Attribute> {
 		return this.getValue() - att.getValue();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			Attribute att = (Attribute) obj;
+			return this.getName().equals(att.getName());
+		} catch (Exception e){
+			return false;
+		}
+	}
+	
 }

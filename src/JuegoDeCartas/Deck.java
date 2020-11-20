@@ -11,16 +11,15 @@ public class Deck {
 		cards = new ArrayList<Card>();
 	}
 		
-    public void addCard(Card c) {  
+    public void addCard(Card c) { 
+    	if (cards.isEmpty()) {
     		cards.add(c);
+    	} else {
+       	 	if (c.equals(this.topCard()))
+       	 		cards.add(c);
+    	}    		
     } 
-	
-    public void addCardCriterio(Card c) {  
-      	CriterioIgualCaracteristica criterio = new CriterioIgualCaracteristica(this.topCard());
-        if (criterio.cumple(c))
-      		cards.add(c);
-    }
-    
+	   
     public Card topCard() {
     	if (!cards.isEmpty()) { 
     		return cards.get(0); 

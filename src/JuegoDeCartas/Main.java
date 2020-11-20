@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 
-	 /*	// 1er Mazo		
+		// 1er Mazo		
 		Strategy obstinado = new Obstinate("fuerza");
 		Strategy ambitious = new Ambitious();
 	
@@ -58,12 +58,12 @@ public class Main {
 		game.addPotion(selectivaPeso); game.addPotion(selectivaPeso2);
 		game.addPotion(selectivaFuerza); game.addPotion(selectivaFuerza2);
 		 
-		game.addPotion(pocimaCocktail2);   */
+		game.addPotion(pocimaCocktail2);  
 		
 		
        // 2do Mazo 		
 		
-		Strategy ambitious = new Ambitious();
+	/*	Strategy ambitious = new Ambitious();
 		Strategy random = new Random();
 		
 		Player p1 = new Player("Tomas", random);
@@ -97,10 +97,10 @@ public class Main {
 		game.addPotion(pocimaCocktail2);
 		
 		String path = "./src/JuegoDeCartas/autos.json";
-		game.loadDeck(path);    
+		game.loadDeck(path);    */
 		
 		game.startGame();
 		
-		System.out.println(game.getLog());
+		System.out.println(game.getLog());    
 	}
 }

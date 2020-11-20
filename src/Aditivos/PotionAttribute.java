@@ -17,7 +17,6 @@ public class PotionAttribute extends PotionPercentage {
 		if (att.getName().equals(attributeName)) {
 			super.modify(att);
 		} 
-		
 		return att;
 	}
 

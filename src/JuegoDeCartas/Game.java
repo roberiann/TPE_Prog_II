@@ -11,7 +11,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import Aditivos.ElementPotion;
+import Aditivos.Potion;
 
 public class Game {
 	private Player player1;
@@ -21,7 +21,7 @@ public class Game {
 	private Player handWinner;
 	private Player handLooser;
 	private String log;
-	private ArrayList<ElementPotion> potions;
+	private ArrayList<Potion> potions;
 	
 	public Game(Player p1, Player p2, int maxRounds) {
 		
@@ -32,10 +32,10 @@ public class Game {
 		handWinner  = player1;	
 		handLooser  = player2;	
 		log = "";
-		potions = new ArrayList<ElementPotion>();
+		potions = new ArrayList<Potion>();
 	}
 	
-	public void addPotion(ElementPotion potion) {
+	public void addPotion(Potion potion) {
 		potions.add(potion);
 	}
 	
@@ -49,13 +49,10 @@ public class Game {
             JsonReader reader = Json.createReader(is);
             // Obtenemos el JsonObject a partir del JsonReader.
             JsonArray jsonCards = (JsonArray) reader.readObject().getJsonArray("cartas");
-                                  
-            JsonObject card = jsonCards.getValuesAs(JsonObject.class).get(0);
-            deck.addCard(genCard(card));        
-                                
-            for (int i = 1; i < jsonCards.size() ; i++) {
-            	JsonObject newCard = jsonCards.getValuesAs(JsonObject.class).get(i);
-            	deck.addCardCriterio(genCard(newCard));
+                                                     
+            for (int i = 0; i < jsonCards.size() ; i++) {
+            	JsonObject card = jsonCards.getValuesAs(JsonObject.class).get(i);
+            	deck.addCard(genCard(card));
 			}                
             reader.close();
             deck.shuffle();              
@@ -66,7 +63,6 @@ public class Game {
         }
     }
 
-	
 	//Genera una carta
 	private Card genCard(JsonObject carta) {
 		Card c1 = new Card(carta.getString("nombre"));
@@ -118,32 +114,25 @@ public class Game {
 		String attWinner = handWinner.getAttribute();
 		log += "El jugador " + handWinner + " selecciona competir por el atributo " + attWinner + "\n";
 		
-		int valueP1 = handWinner.topCard().getAttValue(attWinner);
-		log += "La carta de " + handWinner + " es " + handWinner.topCard() + " con " + attWinner + " " + valueP1;
-		if (handWinner.topCard().hasPotion()) {
-			valueP1 = handWinner.topCard().getAttValuePlusPotion(attWinner);
-			log += ", se aplicó pócima " + handWinner.topCard().getPotionName() + " valor resultante " + valueP1;
-		}	
-		log += "\n";
+		Card c1 = handWinner.topCard();
+		Card c2 = handLooser.topCard();
 		
-		int valueP2 = handLooser.topCard().getAttValue(attWinner);
-		log += "La carta de " + handLooser + " es " + handLooser.topCard() + " con " + attWinner + " " + valueP2 ;
-		if (handLooser.topCard().hasPotion()) {
-			valueP2 = handLooser.topCard().getAttValuePlusPotion(attWinner);
-			log += ", se aplicó pócima " + handLooser.topCard().getPotionName() + " valor resultante " + valueP2;
-		}
-		log += "\n";
+		log += "La carta de " + handWinner + " es " + c1 + " con " + attWinner + " " + c1.getAttValue(attWinner);
+		log += c1.getLog(attWinner);
 		
-		combat(valueP1, valueP2);		
+		log += "La carta de " + handLooser + " es " + c2 + " con " + attWinner + " " + c2.getAttValue(attWinner);
+		log += c2.getLog(attWinner);
+		
+		combat(c1, c2, attWinner);		
 	}
 
 	
-	private void combat(int valueP1, int valueP2) {
+	private void combat(Card c1, Card c2, String att) {
 		
-		if (valueP1 > valueP2) {
+		if (c1.compareTo(c2, att) > 0) {
 				resolveWinner();
 		} else {
-			if (valueP1 < valueP2) {		
+			if (c1.compareTo(c2, att) < 0) {		
 				Player aux = handWinner;
 				handWinner = handLooser; 
 				handLooser = aux;

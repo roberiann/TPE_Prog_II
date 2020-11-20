@@ -14,7 +14,7 @@ public class Player {
 	}
     
     
-    public void addStrategy(Strategy strategy) {
+    public void setStrategy(Strategy strategy) {
     	this.strategy = strategy;
     }
     

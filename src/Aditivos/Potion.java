@@ -2,21 +2,16 @@ package Aditivos;
 
 import JuegoDeCartas.Attribute;
 
-public abstract class Potion extends ElementPotion {
+public abstract class Potion{
 	
-	protected double value;
+	protected String name;
+		 
+	public Potion(String name) {
+		this.name = name;
+	}
 	
-	public Potion(String name, double value) {
-		super(name);
-		this.value = value; 
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
+	public String getName() {
+		return name;
 	}
 
 	public abstract Attribute modify(Attribute att);
