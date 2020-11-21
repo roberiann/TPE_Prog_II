@@ -28,11 +28,9 @@ public class Deck {
     }
 	
 	public Card removeTopCard() {
-		if (!cards.isEmpty()) {
+		if (!cards.isEmpty()) 
 			return cards.remove(0);
-		} else {
-			return null;
-		}	
+		return null;
 	}
 	
 	public boolean isEmpty() {

@@ -19,8 +19,7 @@ public class Obstinate extends Strategy {
 	public String getAttribute(Card card) {
 		if (card.hasAttribute(this.getName()))		
 			return this.getName(); 
-		else 
-			return null;
+		return null;
 	}
 
 

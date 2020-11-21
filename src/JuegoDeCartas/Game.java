@@ -18,8 +18,6 @@ public class Game {
 	private Player player2; 
 	private Deck deck;
 	private int maxRounds;
-	private Player handWinner;
-	private Player handLooser;
 	private String log;
 	private ArrayList<Potion> potions;
 	
@@ -29,8 +27,6 @@ public class Game {
 		deck = new Deck();
 		player1 = p1;
 		player2 = p2;    	
-		handWinner  = player1;	
-		handLooser  = player2;	
 		log = "";
 		potions = new ArrayList<Potion>();
 	}
@@ -95,7 +91,6 @@ public class Game {
 	}
 	
 	//Inicio del juego
-	
 	public void startGame(){
 		  dealCards();	
 		  
@@ -108,53 +103,49 @@ public class Game {
 		  
 		  checkWinner();
 	}
-		
+
+	//Juega la ronda
 	private void playRound() {
 		
-		String attWinner = handWinner.getAttribute();
-		log += "El jugador " + handWinner + " selecciona competir por el atributo " + attWinner + "\n";
+		String att = player1.getAttribute();
+		log += "El jugador " + player1 + " selecciona competir por el atributo " + att + "\n";
 		
-		Card c1 = handWinner.topCard();
-		Card c2 = handLooser.topCard();
+		Card c1 = player1.topCard();
+		Card c2 = player2.topCard();
 		
-		log += "La carta de " + handWinner + " es " + c1 + " con " + attWinner + " " + c1.getAttValue(attWinner);
-		log += c1.getLog(attWinner);
+		log += "La carta de " + player1 + " es " + c1 + c1.getLog(att);
+		log += "La carta de " + player2 + " es " + c2 + c2.getLog(att);
 		
-		log += "La carta de " + handLooser + " es " + c2 + " con " + attWinner + " " + c2.getAttValue(attWinner);
-		log += c2.getLog(attWinner);
-		
-		combat(c1, c2, attWinner);		
+		combat(c1, c2, att);		
 	}
 
-	
+	//Enfrenta cartas x atributo
 	private void combat(Card c1, Card c2, String att) {
 		
-		if (c1.compareTo(c2, att) > 0) {
-				resolveWinner();
-		} else {
-			if (c1.compareTo(c2, att) < 0) {		
-				Player aux = handWinner;
-				handWinner = handLooser; 
-				handLooser = aux;
-				resolveWinner();
-			} else {
+		if (c1.compareTo(c2, att) == 0) {
 				resolveTie();
-			}				
+		} else {		
+			if (c1.compareTo(c2, att) < 0) {		
+				Player aux = player1;
+				player1 = player2; 
+				player2 = aux;
+			} 
+			resolveWinner();
 		}
-		log += handWinner + " posee ahora " + handWinner.deckSize() + " cartas y " + handLooser + " posee ahora " + handLooser.deckSize() + " cartas.\n\n";
+		log += player1 + " posee ahora " + player1.deckSize() + " cartas y " + player2 + " posee ahora " + player2.deckSize() + " cartas.\n\n";
 		
 	}
 	
 	private void resolveWinner() {
-		handWinner.addCard(handWinner.removeTopCard());
-		handWinner.addCard(handLooser.removeTopCard());
+		player1.addCard(player1.removeTopCard());
+		player1.addCard(player2.removeTopCard());
 		
-		log += "Gana la ronda " + handWinner + ".\n";
+		log += "Gana la ronda " + player1 + ".\n";
 	}
 	
     private void resolveTie() {
-    	handLooser.addCard(handLooser.removeTopCard());
-    	handWinner.addCard(handWinner.removeTopCard());
+    	player2.addCard(player2.removeTopCard());
+    	player1.addCard(player1.removeTopCard());
 		
 		log += "Empataron la ronda.\n";
     }

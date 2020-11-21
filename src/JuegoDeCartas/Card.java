@@ -24,10 +24,6 @@ public class Card{
 		return attributes.get(index).getName();
 	}
 	
-	private Potion getPotion() {
-		return potion;
-	}
-
 	public ArrayList<String> getAttributesNames() {
 		ArrayList<String> att = new ArrayList<String>();
 		for (Attribute elem : attributes) {
@@ -49,9 +45,9 @@ public class Card{
 	}
 
 	public String getLog(String att) {
-		String result = "";
+		String result = " con " + att + " " + this.getAttributeByName(att).getValue();
 		if (this.hasPotion()) 
-			result += ", se aplicó pócima " + this.potion.getName() + " valor resultante " + this.getAttValuePlusPotion(att);
+			result += ", se aplicó pócima " + this.potion.getName() + " valor resultante " + this.getPotioned(att).getValue();
 		return result + "\n";
 	 }
 	
@@ -63,21 +59,6 @@ public class Card{
 		this.potion = p;
 	}
 
-	public int getAttValue(String attrName) {
-		for (Attribute att : attributes) {
-			if (att.getName().equals(attrName)) 
-				return att.getValue();
-		}
-		return -1;
-	}	
-	
-	public boolean hasAttribute(String attrName) {
-		for (Attribute att : attributes) {
-			if (att.getName().equals(attrName))
-				return true;
-		}
-		return false;
-	}
 	
 	public String getName() {
 		return name;
@@ -88,37 +69,35 @@ public class Card{
 		return this.name;
 	}
 		
+	public int sizeAttributes() {
+		return attributes.size();
+	}
+		
+	private Attribute getPotioned(String att) {
+		Attribute aux = this.getAttributeByName(att);
+		if (this.hasPotion())
+			return this.potion.modify(aux);
+		return aux;
+	}
+	
+	public int compareTo(Card c1, String att) {
+		return this.getPotioned(att).compareTo(c1.getPotioned(att));
+	}
+	
+	public boolean hasAttribute(String attrName) {
+		for (Attribute att : attributes) {
+			if (att.getName().equals(attrName))
+				return true;
+		}
+		return false;
+	}	
+	
 	public boolean sameAttributes(Card c) {
 		for (Attribute att : attributes) {
 			if (!c.hasAttribute(att.getName()))
 				return false;
 		} 
 	    return true;  
-	}
-	
-	public int sizeAttributes() {
-		return attributes.size();
-	}
-	
-	
-	public int getAttValuePlusPotion(String attrName) {
-		if (this.hasPotion()) {
-			Attribute att = new Attribute(attrName, this.getAttValue(attrName));
-			return this.potion.modify(att).getValue();
-		} else {
-			return this.getAttValue(attrName);
-		}
-	}
-	
-	//MAL
-	public int compareTo(Card c1, String att) {
-		Attribute att1 = this.getAttributeByName(att);
-		Attribute att2 = c1.getAttributeByName(att);
-		if (this.hasPotion())
-			att1 = this.potion.modify(att1);
-		if (c1.hasPotion())
-			att2 = c1.getPotion().modify(att2);
-		return att1.compareTo(att2);		
 	}
 	
 	@Override

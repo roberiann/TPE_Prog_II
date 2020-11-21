@@ -14,7 +14,6 @@ public class Ambitious extends Strategy {
 		for (String elem : attributes) {
 			if (card.getAttributeByName(elem).compareTo(higher)>0)
 				higher = card.getAttributeByName(elem);
-				
 		}
 		return higher.getName();	
 	}

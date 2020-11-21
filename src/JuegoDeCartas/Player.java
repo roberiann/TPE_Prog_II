@@ -19,8 +19,7 @@ public class Player {
     }
     
     public void addCard(Card c) {
-    	if (c != null)
-    		deck.addCard(c);
+   		deck.addCard(c);
     }
    
 	public String getName() {
